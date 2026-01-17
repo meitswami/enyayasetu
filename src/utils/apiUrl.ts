@@ -31,19 +31,18 @@ export function getApiUrl(includeApiPath: boolean = false): string {
     return includeApiPath ? `${cleanUrl}/api` : cleanUrl;
   }
 
-  // Production but no VITE_API_URL configured - this is an error
-  // We'll still return same origin, but log a warning
-  if (isBrowser && !envApiUrl) {
-    console.warn(
-      '⚠️ VITE_API_URL is not configured. API calls will use same origin.\n' +
-      'Please set VITE_API_URL environment variable to your backend server URL.\n' +
-      'Example: https://your-backend.example.com'
-    );
-  }
-
   // Fallback: Use same origin (only works if backend is on same domain)
-  // This is a last resort - user should configure VITE_API_URL
+  // This is fine for Vercel deployments where frontend and backend are on same domain
   const origin = isBrowser ? window.location.origin : '';
+  
+  // Production but no VITE_API_URL configured
+  // Since we're using same origin (Vercel), this is fine - no warning needed
+  // Only log a warning if origin is unavailable (which shouldn't happen in browser)
+  // Don't show warning for same origin - that's the correct behavior for Vercel!
+  if (isBrowser && !envApiUrl && !origin) {
+    // Only warn if we can't get origin at all (shouldn't happen)
+    console.error('⚠️ Cannot determine API URL - origin unavailable');
+  }
   
   if (includeApiPath) {
     return `${origin}/api`;

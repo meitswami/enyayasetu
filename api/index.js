@@ -20,6 +20,16 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Error handling middleware (early - catches all errors)
+app.use((err, req, res, next) => {
+  console.error('Express Error:', err);
+  console.error('Stack:', err.stack);
+  res.status(500).json({
+    error: err.message || 'Internal server error',
+    type: err.name || 'Error'
+  });
+});
+
 // Serve uploaded files (if needed - Vercel uses /tmp for serverless)
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
@@ -97,11 +107,32 @@ app.get('/', (req, res) => {
   });
 });
 
-// Error handling middleware
+// Test endpoint to check environment variables (for debugging)
+app.get('/api/test-env', (req, res) => {
+  res.json({
+    env: {
+      dbHost: process.env.DB_HOST ? 'SET' : 'NOT SET',
+      dbUser: process.env.DB_USER ? 'SET' : 'NOT SET',
+      dbName: process.env.DB_NAME ? 'SET' : 'NOT SET',
+      jwtSecret: process.env.JWT_SECRET ? 'SET' : 'NOT SET',
+      nodeEnv: process.env.NODE_ENV || 'NOT SET',
+      vercel: process.env.VERCEL ? 'YES' : 'NO'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Error handling middleware (must be last)
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('Express Error Middleware:', err);
+  console.error('Error Stack:', err.stack);
+  console.error('Error Name:', err.name);
+  console.error('Error Code:', err.code);
+  
   res.status(err.status || 500).json({
     error: err.message || 'Internal server error',
+    type: err.name || 'Error',
+    code: err.code
   });
 });
 

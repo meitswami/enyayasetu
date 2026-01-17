@@ -5,8 +5,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { query, queryOne, insert, update, generateUUID } from '../integrations/mysql/client';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const JWT_SECRET: string = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || '7d';
 
 export interface User {
   id: string;
@@ -197,7 +197,13 @@ export async function verifyToken(token: string): Promise<User | null> {
 
 // Generate JWT token
 function generateToken(userId: string): string {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  if (!JWT_SECRET || JWT_SECRET === 'your-secret-key-change-in-production') {
+    throw new Error('JWT_SECRET is not set. Please configure JWT_SECRET environment variable.');
+  }
+  const options: jwt.SignOptions = {
+    expiresIn: JWT_EXPIRES_IN
+  };
+  return jwt.sign({ userId }, JWT_SECRET, options);
 }
 
 // Create session object
