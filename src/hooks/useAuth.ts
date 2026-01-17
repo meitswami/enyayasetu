@@ -1,0 +1,123 @@
+import { useState, useEffect } from 'react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+interface User {
+  id: string;
+  email: string;
+  email_verified: boolean;
+  raw_user_meta_data?: any;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Session {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  user: User;
+}
+
+export const useAuth = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check for existing session in localStorage
+    const checkSession = () => {
+      try {
+        const stored = localStorage.getItem('auth_session');
+        if (stored) {
+          const parsedSession = JSON.parse(stored);
+          setSession(parsedSession);
+          setUser(parsedSession.user);
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+        localStorage.removeItem('auth_session');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, []);
+
+  const signUp = async (email: string, password: string, displayName?: string) => {
+    try {
+      const response = await fetch(`${API_URL}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, metadata: { display_name: displayName } }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.session) {
+        setSession(data.session);
+        setUser(data.session.user);
+        localStorage.setItem('auth_session', JSON.stringify(data.session));
+        return { data, error: null };
+      } else {
+        const errorMessage = data?.error || 'Sign up failed';
+        return { data: null, error: new Error(errorMessage) };
+      }
+    } catch (error: any) {
+      console.error('Sign up error:', error);
+      return { 
+        data: null, 
+        error: error instanceof Error ? error : new Error('Network error. Please check if the server is running.') 
+      };
+    }
+  };
+
+  const signIn = async (email: string, password: string) => {
+    try {
+      const response = await fetch(`${API_URL}/auth/signin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.session) {
+        setSession(data.session);
+        setUser(data.session.user);
+        localStorage.setItem('auth_session', JSON.stringify(data.session));
+        return { data, error: null };
+      } else {
+        const errorMessage = data?.error || 'Sign in failed';
+        return { data: null, error: new Error(errorMessage) };
+      }
+    } catch (error: any) {
+      console.error('Sign in error:', error);
+      return { 
+        data: null, 
+        error: error instanceof Error ? error : new Error('Network error. Please check if the server is running.') 
+      };
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      setSession(null);
+      setUser(null);
+      localStorage.removeItem('auth_session');
+      return { error: null };
+    } catch (error: any) {
+      return { error };
+    }
+  };
+
+  return {
+    user,
+    session,
+    loading,
+    signUp,
+    signIn,
+    signOut,
+    isAuthenticated: !!user,
+  };
+};

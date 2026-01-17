@@ -1,0 +1,683 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Playfair+Display:wght@700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 48 96% 89%;
+
+    --card: 222 47% 15%;
+    --card-foreground: 48 96% 89%;
+
+    --popover: 222 47% 13%;
+    --popover-foreground: 48 96% 89%;
+
+    --primary: 43 96% 56%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 0 72% 51%;
+    --secondary-foreground: 48 96% 95%;
+
+    --muted: 222 30% 20%;
+    --muted-foreground: 48 30% 70%;
+
+    --accent: 43 96% 56%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 48 96% 95%;
+
+    --border: 43 40% 30%;
+    --input: 222 30% 25%;
+    --ring: 43 96% 56%;
+
+    --radius: 0.5rem;
+
+    /* Custom tokens */
+    --bubble-bg: 48 100% 96%;
+    --bubble-border: 222 47% 11%;
+    --bubble-text: 222 47% 11%;
+    
+    --judge-color: 43 96% 56%;
+    --prosecutor-color: 0 72% 51%;
+    --lawyer-color: 142 76% 36%;
+    --accused-color: 221 83% 53%;
+
+    --comic-shadow: 4px 4px 0px hsl(222 47% 5%);
+    --comic-shadow-lg: 6px 6px 0px hsl(222 47% 5%);
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 48 96% 89%;
+    --card: 222 47% 15%;
+    --card-foreground: 48 96% 89%;
+    --popover: 222 47% 13%;
+    --popover-foreground: 48 96% 89%;
+    --primary: 43 96% 56%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 0 72% 51%;
+    --secondary-foreground: 48 96% 95%;
+    --muted: 222 30% 20%;
+    --muted-foreground: 48 30% 70%;
+    --accent: 43 96% 56%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 48 96% 95%;
+    --border: 43 40% 30%;
+    --input: 222 30% 25%;
+    --ring: 43 96% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 0.05em;
+  }
+
+  /* Clear, readable font for pricing and important headings */
+  /* Override comic font for CardTitle and pricing headings */
+  h3.heading-clear,
+  .heading-clear,
+  .pricing-heading {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: normal;
+  }
+}
+
+@layer components {
+  .comic-panel {
+    @apply relative border-4 border-foreground rounded-lg overflow-hidden;
+    box-shadow: var(--comic-shadow-lg);
+  }
+
+  .speech-bubble {
+    @apply relative px-6 py-4 rounded-2xl border-4 border-foreground;
+    background: hsl(var(--bubble-bg));
+    color: hsl(var(--bubble-text));
+    box-shadow: var(--comic-shadow);
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+  }
+
+  .speech-bubble::after {
+    content: '';
+    @apply absolute w-0 h-0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid hsl(var(--bubble-bg));
+    bottom: -20px;
+    left: 30px;
+  }
+
+  .speech-bubble::before {
+    content: '';
+    @apply absolute w-0 h-0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 24px solid hsl(var(--bubble-border));
+    bottom: -26px;
+    left: 27px;
+  }
+
+  .speech-bubble-right::after {
+    left: auto;
+    right: 30px;
+  }
+
+  .speech-bubble-right::before {
+    left: auto;
+    right: 27px;
+  }
+
+  .comic-title {
+    font-family: 'Bangers', cursive;
+    text-shadow: 3px 3px 0 hsl(var(--background)), 
+                 -1px -1px 0 hsl(var(--background)),
+                 1px -1px 0 hsl(var(--background)),
+                 -1px 1px 0 hsl(var(--background));
+  }
+
+  .gavel-animation {
+    animation: gavel-strike 0.5s ease-in-out;
+  }
+
+  @keyframes gavel-strike {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-30deg); }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .bubble-appear {
+    animation: bubbleAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+
+  @keyframes bubbleAppear {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .character-idle {
+    animation: idle 3s ease-in-out infinite;
+  }
+
+  @keyframes idle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
+    }
+  }
+}
+
+/* Witness Stand Animations */
+@keyframes spotlight-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scaleY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(-50%) scaleY(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+@keyframes spotlight-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scaleY(0);
+  }
+}
+
+@keyframes witness-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes witness-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(50px) scale(0.9);
+  }
+}
+
+@keyframes glow-pulse-witness {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.animate-spotlight-enter {
+  animation: spotlight-enter 0.8s ease-out forwards;
+}
+
+.animate-spotlight-exit {
+  animation: spotlight-exit 0.5s ease-in forwards;
+}
+
+.animate-witness-enter {
+  animation: witness-enter 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-witness-exit {
+  animation: witness-exit 0.5s ease-in forwards;
+}
+
+.animate-glow-pulse-witness {
+  animation: glow-pulse-witness 2s ease-in-out infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Objection Overlay Animations */
+@keyframes objection-bg-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes objection-bg-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes burst-in {
+  0% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes burst-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes objection-text-in {
+  0% {
+    transform: scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.3) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes objection-text-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.5) translateY(-50px);
+    opacity: 0;
+  }
+}
+
+@keyframes objection-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes ray-pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes speed-line {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scaleY(0.5);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px) scaleY(1.5);
+  }
+}
+
+.animate-objection-bg-in {
+  animation: objection-bg-in 0.3s ease-out forwards;
+}
+
+.animate-objection-bg-out {
+  animation: objection-bg-out 0.5s ease-in forwards;
+}
+
+.animate-burst-in {
+  animation: burst-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-burst-out {
+  animation: burst-out 0.5s ease-in forwards;
+}
+
+.animate-objection-text-in {
+  animation: objection-text-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-objection-text-out {
+  animation: objection-text-out 0.4s ease-in forwards;
+}
+
+.animate-objection-shake {
+  animation: objection-shake 0.5s ease-in-out;
+  animation-delay: 0.4s;
+}
+
+.animate-ray-pulse {
+  animation: ray-pulse 0.3s ease-in-out infinite;
+}
+
+.animate-speed-line {
+  animation: speed-line 0.6s ease-out forwards;
+}
+
+.comic-text-stroke {
+  -webkit-text-stroke: 4px hsl(222 47% 10%);
+  paint-order: stroke fill;
+}
+
+/* Verdict Overlay Animations */
+@keyframes verdict-bg-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes verdict-bg-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes verdict-text-in {
+  0% {
+    transform: scale(0) translateY(50px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes verdict-text-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8) translateY(-30px);
+    opacity: 0;
+  }
+}
+
+@keyframes verdict-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50% { transform: translateX(-8px) rotate(-1deg); }
+  20%, 40%, 60% { transform: translateX(8px) rotate(1deg); }
+  70% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  90% { transform: translateX(-2px); }
+}
+
+@keyframes gavel-slam {
+  0% { transform: translateY(-100px) rotate(-45deg); opacity: 0; }
+  30% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  40% { transform: translateY(-20px) rotate(5deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes glow-expand {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 0.3; }
+}
+
+@keyframes line-expand {
+  0% { width: 0; opacity: 0; }
+  100% { width: 300px; opacity: 1; }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-verdict-bg-in {
+  animation: verdict-bg-in 0.5s ease-out forwards;
+}
+
+.animate-verdict-bg-out {
+  animation: verdict-bg-out 0.8s ease-in forwards;
+}
+
+.animate-verdict-text-in {
+  animation: verdict-text-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-verdict-text-out {
+  animation: verdict-text-out 0.5s ease-in forwards;
+}
+
+.animate-verdict-shake {
+  animation: verdict-shake 0.6s ease-in-out;
+  animation-delay: 0.6s;
+}
+
+.animate-gavel-slam {
+  animation: gavel-slam 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-glow-expand {
+  animation: glow-expand 1s ease-out forwards;
+}
+
+.animate-line-expand {
+  animation: line-expand 0.5s ease-out forwards;
+}
+
+.animate-confetti-fall {
+  animation: confetti-fall 3s linear forwards;
+}
+
+/* Judge Ruling (Sustained/Overruled) Animations */
+@keyframes ruling-bg-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ruling-bg-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes ruling-burst-in {
+  0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes ruling-burst-out {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(1.3); opacity: 0; }
+}
+
+@keyframes ruling-text-in {
+  0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+  70% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes ruling-text-out {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(0.7) translateY(-30px); opacity: 0; }
+}
+
+@keyframes ruling-shake {
+  0%, 100% { transform: translateX(0); }
+  15%, 45% { transform: translateX(-6px); }
+  30%, 60% { transform: translateX(6px); }
+  75% { transform: translateX(-3px); }
+  90% { transform: translateX(3px); }
+}
+
+@keyframes ruling-icon {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes impact-line {
+  0% { opacity: 0; transform: scaleY(0) translateY(0); }
+  30% { opacity: 1; transform: scaleY(1) translateY(-20px); }
+  100% { opacity: 0; transform: scaleY(0.5) translateY(-40px); }
+}
+
+.animate-ruling-bg-in {
+  animation: ruling-bg-in 0.2s ease-out forwards;
+}
+
+.animate-ruling-bg-out {
+  animation: ruling-bg-out 0.3s ease-in forwards;
+}
+
+.animate-ruling-burst-in {
+  animation: ruling-burst-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-ruling-burst-out {
+  animation: ruling-burst-out 0.3s ease-in forwards;
+}
+
+.animate-ruling-text-in {
+  animation: ruling-text-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-ruling-text-out {
+  animation: ruling-text-out 0.3s ease-in forwards;
+}
+
+.animate-ruling-shake {
+  animation: ruling-shake 0.4s ease-in-out;
+  animation-delay: 0.3s;
+}
+
+.animate-ruling-icon {
+  animation: ruling-icon 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-impact-line {
+  animation: impact-line 0.5s ease-out forwards;
+}
+
+@layer utilities {
+  .text-shadow-comic {
+    text-shadow: 2px 2px 0 hsl(var(--background));
+  }
+
+  .border-comic {
+    border: 4px solid hsl(var(--foreground));
+    box-shadow: var(--comic-shadow);
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-200;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--comic-shadow-lg);
+  }
+}
