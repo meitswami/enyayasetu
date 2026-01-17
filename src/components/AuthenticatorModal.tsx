@@ -412,26 +412,40 @@ export const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
                 </div>
               </div>
             </div>
-          ) : null}
+          ) : (
+            <div className="flex items-center justify-center p-4 bg-muted/50 rounded-lg">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mr-2" />
+              <p className="text-sm text-muted-foreground">Loading QR code...</p>
+            </div>
+          )}
 
-          <div className="space-y-4">
+          <div className="space-y-4 border-t pt-4">
             <div>
-              <Label>6-Digit Authenticator Code</Label>
-              <InputOTP
-                maxLength={6}
-                value={otp}
-                onChange={setOtp}
-                className="justify-center mt-2"
-              >
-                <InputOTPGroup>
-                  {[...Array(6)].map((_, i) => (
-                    <InputOTPSlot key={i} index={i} />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                Enter the code from your authenticator app
-              </p>
+              <Label className="text-base font-semibold mb-3 block">
+                6-Digit Code from Microsoft Authenticator *
+              </Label>
+              <div className="bg-muted/30 rounded-lg p-4 mb-2">
+                <p className="text-sm text-muted-foreground mb-3 text-center">
+                  Open Microsoft Authenticator app on your phone and enter the 6-digit code shown there
+                </p>
+                <InputOTP
+                  maxLength={6}
+                  value={otp}
+                  onChange={setOtp}
+                  className="justify-center"
+                >
+                  <InputOTPGroup>
+                    {[...Array(6)].map((_, i) => (
+                      <InputOTPSlot key={i} index={i} />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                {otp.length > 0 && otp.length < 6 && (
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    Enter {6 - otp.length} more digit{6 - otp.length !== 1 ? 's' : ''}
+                  </p>
+                )}
+              </div>
             </div>
 
             <Button
@@ -462,7 +476,7 @@ export const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-2">Authenticator Code Required</h3>
             <p className="text-sm text-muted-foreground">
-              Please enter the 6-digit authenticator code to access eNyayaSetu
+              Please enter the 6-digit code from Microsoft Authenticator to access eNyayaSetu
             </p>
           </div>
 
@@ -479,20 +493,32 @@ export const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
               />
             </div>
 
-            <div>
-              <Label>6-Digit Authenticator Code *</Label>
-              <InputOTP
-                maxLength={6}
-                value={otp}
-                onChange={setOtp}
-                className="justify-center mt-2"
-              >
-                <InputOTPGroup>
-                  {[...Array(6)].map((_, i) => (
-                    <InputOTPSlot key={i} index={i} />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
+            <div className="border-t pt-4">
+              <Label className="text-base font-semibold mb-3 block">
+                6-Digit Code from Microsoft Authenticator *
+              </Label>
+              <div className="bg-muted/30 rounded-lg p-4 mb-2">
+                <p className="text-sm text-muted-foreground mb-3 text-center">
+                  Open Microsoft Authenticator app on your phone and enter the 6-digit code shown there
+                </p>
+                <InputOTP
+                  maxLength={6}
+                  value={otp}
+                  onChange={setOtp}
+                  className="justify-center"
+                >
+                  <InputOTPGroup>
+                    {[...Array(6)].map((_, i) => (
+                      <InputOTPSlot key={i} index={i} />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                {otp.length > 0 && otp.length < 6 && (
+                  <p className="text-xs text-muted-foreground mt-2 text-center">
+                    Enter {6 - otp.length} more digit{6 - otp.length !== 1 ? 's' : ''}
+                  </p>
+                )}
+              </div>
             </div>
 
             <Button
