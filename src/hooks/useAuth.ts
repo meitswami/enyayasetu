@@ -52,6 +52,25 @@ export const useAuth = () => {
         body: JSON.stringify({ email, password, metadata: { display_name: displayName } }),
       });
 
+      // Check content type before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        
+        if (response.status === 404) {
+          return { 
+            data: null, 
+            error: new Error('Backend API not found. Please configure VITE_API_URL to point to your backend server.') 
+          };
+        }
+        
+        return { 
+          data: null, 
+          error: new Error(`Backend returned ${response.status}. Please ensure the API server is running and VITE_API_URL is configured correctly.`) 
+        };
+      }
+
       const data = await response.json();
       
       if (response.ok && data.session) {
@@ -65,6 +84,15 @@ export const useAuth = () => {
       }
     } catch (error: any) {
       console.error('Sign up error:', error);
+      
+      // Handle JSON parse errors specifically
+      if (error instanceof SyntaxError && error.message.includes('JSON')) {
+        return { 
+          data: null, 
+          error: new Error('Backend API not configured. Please set VITE_API_URL environment variable to your backend server URL.') 
+        };
+      }
+      
       return { 
         data: null, 
         error: error instanceof Error ? error : new Error('Network error. Please check if the server is running.') 
@@ -81,6 +109,25 @@ export const useAuth = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      // Check content type before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
+        
+        if (response.status === 404) {
+          return { 
+            data: null, 
+            error: new Error('Backend API not found. Please configure VITE_API_URL to point to your backend server.') 
+          };
+        }
+        
+        return { 
+          data: null, 
+          error: new Error(`Backend returned ${response.status}. Please ensure the API server is running and VITE_API_URL is configured correctly.`) 
+        };
+      }
+
       const data = await response.json();
       
       if (response.ok && data.session) {
@@ -94,6 +141,15 @@ export const useAuth = () => {
       }
     } catch (error: any) {
       console.error('Sign in error:', error);
+      
+      // Handle JSON parse errors specifically
+      if (error instanceof SyntaxError && error.message.includes('JSON')) {
+        return { 
+          data: null, 
+          error: new Error('Backend API not configured. Please set VITE_API_URL environment variable to your backend server URL.') 
+        };
+      }
+      
       return { 
         data: null, 
         error: error instanceof Error ? error : new Error('Network error. Please check if the server is running.') 
