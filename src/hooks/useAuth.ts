@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '@/utils/apiUrl';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = getApiUrl(true); // Get API base URL with /api path
 
 interface User {
   id: string;

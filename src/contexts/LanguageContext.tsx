@@ -142,6 +142,21 @@ const translations: Record<Language, Record<string, string>> = {
     'dialogue.judge.noted': 'आपत्ति नोट की गई। दोनों वकीलों को सलाह दी जाती है कि वे शिष्टाचार बनाए रखें। यह न्यायालय अब अपनी टिप्पणियां देगा।',
     'dialogue.judge.decision': 'सभी प्रस्तुत साक्ष्यों की सावधानीपूर्वक समीक्षा के बाद, यह ई-कोर्ट पाता है कि आगे की जांच आवश्यक है। विस्तृत सुनवाई के लिए मामला स्थगित किया जाता है।',
     'dialogue.judge.adjourn': 'अगली सुनवाई की तारीख दोनों पक्षों को सूचित की जाएगी। सभी प्रस्तुत साक्ष्य संरक्षित किए जाएंगे। यह न्यायालय स्थगित है! *गैवल स्ट्राइक*',
+    
+    // RTI Tutorial
+    'rti.tutorial.title': 'RTI ट्यूटोरियल और आवेदन',
+    'rti.tutorial.subtitle': 'सूचना का अधिकार अधिनियम की पूर्ण गाइड',
+    'rti.tutorial.progress': 'प्रगति',
+    'rti.tutorial.sections': 'अनुभाग',
+    'rti.tutorial.askAssistant': 'RTI सहायक से पूछें',
+    'rti.tutorial.keyPoints': 'मुख्य बिंदु:',
+    'rti.tutorial.steps': 'चरण:',
+    'rti.tutorial.previous': 'पिछला',
+    'rti.tutorial.next': 'अगला',
+    'rti.tutorial.markComplete': 'पूर्ण के रूप में चिह्नित करें',
+    'rti.tutorial.completed': 'पूर्ण',
+    'rti.tutorial.applyNow': 'अभी RTI के लिए आवेदन करें',
+    'rti.tutorial.paymentRequired': 'RTI ट्यूटोरियल तक पहुंच के लिए ₹50 के भुगतान की आवश्यकता है। पहुंच खरीदने के लिए नीचे क्लिक करें।',
   },
   hinglish: {
     // Hero Section
@@ -223,22 +238,6 @@ const translations: Record<Language, Record<string, string>> = {
     'rti.tutorial.completed': 'Completed',
     'rti.tutorial.applyNow': 'Apply for RTI Now',
     'rti.tutorial.paymentRequired': 'Access to RTI Tutorial requires a payment of ₹50. Click below to purchase access.',
-  },
-  hi: {
-    // RTI Tutorial
-    'rti.tutorial.title': 'RTI ट्यूटोरियल और आवेदन',
-    'rti.tutorial.subtitle': 'सूचना का अधिकार अधिनियम की पूर्ण गाइड',
-    'rti.tutorial.progress': 'प्रगति',
-    'rti.tutorial.sections': 'अनुभाग',
-    'rti.tutorial.askAssistant': 'RTI सहायक से पूछें',
-    'rti.tutorial.keyPoints': 'मुख्य बिंदु:',
-    'rti.tutorial.steps': 'चरण:',
-    'rti.tutorial.previous': 'पिछला',
-    'rti.tutorial.next': 'अगला',
-    'rti.tutorial.markComplete': 'पूर्ण के रूप में चिह्नित करें',
-    'rti.tutorial.completed': 'पूर्ण',
-    'rti.tutorial.applyNow': 'अभी RTI के लिए आवेदन करें',
-    'rti.tutorial.paymentRequired': 'RTI ट्यूटोरियल तक पहुंच के लिए ₹50 के भुगतान की आवश्यकता है। पहुंच खरीदने के लिए नीचे क्लिक करें।',
   },
 };
 
