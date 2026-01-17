@@ -37,7 +37,8 @@ import rtiRoutes from '../server/routes/rti.js';
 import authenticatorRoutes from '../server/routes/authenticator.js';
 
 // API Routes
-// Note: In Vercel, these routes will be accessible at /api/auth, /api/cases, etc.
+// Note: In Vercel, when request comes to /api/auth/signin, 
+// Vercel routes it to this function, and Express receives the full path
 app.use('/api/auth', authRoutes);
 app.use('/api/cases', caseRoutes);
 app.use('/api/payments', paymentRoutes);
@@ -49,6 +50,12 @@ app.use('/api/addons', addonRoutes);
 app.use('/api/case-strength', caseStrengthRoutes);
 app.use('/api/rti', rtiRoutes);
 app.use('/api/authenticator', authenticatorRoutes);
+
+// Debug route to test if function is working
+app.use((req, res, next) => {
+  console.log('Request received:', req.method, req.path, req.url);
+  next();
+});
 
 // Root API endpoint (informational)
 app.get('/api', (req, res) => {
@@ -99,4 +106,8 @@ app.use((err, req, res, next) => {
 });
 
 // Export the Express app for Vercel
+// Vercel will route /api/* requests to this function
 export default app;
+
+// Also export as a named handler (some Vercel setups prefer this)
+export { app as handler };
