@@ -106,8 +106,8 @@ app.use((err, req, res, next) => {
 });
 
 // Export the Express app for Vercel
-// Vercel will route /api/* requests to this function
+// This is the handler that Vercel will call for /api/* requests
 export default app;
 
-// Also export as a named handler (some Vercel setups prefer this)
-export { app as handler };
+// For Vercel compatibility, also export as handler
+export const handler = app;
