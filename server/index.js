@@ -102,11 +102,20 @@ async function testDatabaseConnection() {
   }
 }
 
-// Start server
-app.listen(PORT, async () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📁 Upload directory: ${path.join(__dirname, '../public/uploads')}`);
-  console.log('');
-  await testDatabaseConnection();
-});
+// Start server (only if not in Vercel serverless environment)
+// Vercel serverless functions don't need app.listen()
+if (process.env.VERCEL !== '1' && !process.env.VERCEL_ENV) {
+  app.listen(PORT, async () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📁 Upload directory: ${path.join(__dirname, '../public/uploads')}`);
+    console.log('');
+    await testDatabaseConnection();
+  });
+} else {
+  // In Vercel, test database connection on first import
+  testDatabaseConnection().catch(console.error);
+}
+
+// Export app for Vercel serverless functions
+export default app;
 
