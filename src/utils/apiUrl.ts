@@ -5,38 +5,45 @@
  * Strategy:
  * 1. Use VITE_API_URL if set and valid (not localhost in production)
  * 2. If localhost, use localhost:3000
- * 3. In production, try to infer from hostname or use same origin
+ * 3. In production, warn if API URL is not configured
  */
 export function getApiUrl(includeApiPath: boolean = false): string {
   // First, check if VITE_API_URL is explicitly set (environment variable)
   const envApiUrl = import.meta.env.VITE_API_URL;
   
-  // Get current hostname
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  const protocol = typeof window !== 'undefined' ? window.location.protocol : 'https:';
+  // Get current hostname (runtime check - only available in browser)
+  const isBrowser = typeof window !== 'undefined';
+  const hostname = isBrowser ? window.location.hostname : '';
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
   
   // If running on localhost, use localhost API
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+  if (isLocalhost) {
     const baseUrl = envApiUrl || 'http://localhost:3000';
     // Remove trailing /api if it exists, we'll add it conditionally
     const cleanUrl = baseUrl.replace(/\/api\/?$/, '');
     return includeApiPath ? `${cleanUrl}/api` : cleanUrl;
   }
 
+  // In production (not localhost):
   // If VITE_API_URL is set and not localhost, use it
   if (envApiUrl && !envApiUrl.includes('localhost') && !envApiUrl.includes('127.0.0.1')) {
     const cleanUrl = envApiUrl.replace(/\/api\/?$/, '');
     return includeApiPath ? `${cleanUrl}/api` : cleanUrl;
   }
 
-  // For production deployments without explicit API URL:
-  // Option 1: Try same origin (if backend is on same domain)
-  // Option 2: Try API subdomain (app.example.com -> api.example.com)
-  // Option 3: Default to same origin with /api path
-  
-  // Strategy: Use same origin for now (backend might be on same domain)
-  // User can override with VITE_API_URL environment variable
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  // Production but no VITE_API_URL configured - this is an error
+  // We'll still return same origin, but log a warning
+  if (isBrowser && !envApiUrl) {
+    console.warn(
+      '⚠️ VITE_API_URL is not configured. API calls will use same origin.\n' +
+      'Please set VITE_API_URL environment variable to your backend server URL.\n' +
+      'Example: https://your-backend.example.com'
+    );
+  }
+
+  // Fallback: Use same origin (only works if backend is on same domain)
+  // This is a last resort - user should configure VITE_API_URL
+  const origin = isBrowser ? window.location.origin : '';
   
   if (includeApiPath) {
     return `${origin}/api`;

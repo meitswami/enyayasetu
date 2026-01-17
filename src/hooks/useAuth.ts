@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getApiUrl } from '@/utils/apiUrl';
 
-const API_URL = getApiUrl(true); // Get API base URL with /api path
-
 interface User {
   id: string;
   email: string;
@@ -47,6 +45,7 @@ export const useAuth = () => {
 
   const signUp = async (email: string, password: string, displayName?: string) => {
     try {
+      const API_URL = getApiUrl(true); // Get API base URL with /api path at runtime
       const response = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,6 +74,7 @@ export const useAuth = () => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      const API_URL = getApiUrl(true); // Get API base URL with /api path at runtime
       const response = await fetch(`${API_URL}/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
